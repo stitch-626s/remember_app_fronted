@@ -1,20 +1,19 @@
 <template>
   <div class="home-layout">
+    <div class="menu-top">
+      <el-image class="image-home" :src=url fit="fill"/>
+    </div>
     <el-container>
-      <el-aside class="sidebar-container">
+      <el-aside class="left-sidebar-container">
           <el-menu
             :default-active="route.path"
             class="el-menu-vertical"
           >
-            <!-- 带有下拉列表的组件 -->
-            <el-sub-menu index="1">
-            <template #title>
-              <el-icon><home-filled /></el-icon>
-              <span>首页</span>
-            </template>
-            </el-sub-menu>
+            <el-menu-item index="1">
+            <el-icon><home-filled /></el-icon>
+            <template #title>首页</template>
+            </el-menu-item>
 
-            <!-- 无下拉列表 -->
             <el-menu-item index="2">
             <el-icon><icon-menu /></el-icon>
             <template #title>背题</template>
@@ -32,18 +31,13 @@
           </el-menu>
       </el-aside>
         <el-main>
-          <div>
-            题目
+          <div class="main-top">
+            题库中心
           </div>
-          <div>
-            答案
-          </div>
-          <div>
-            系列按钮
-          </div>
+          <router-view />
         </el-main>
 
-      <el-aside width="200px">
+      <el-aside class="right-sidebar-container">
         Aside
       </el-aside>
     </el-container>
@@ -58,8 +52,10 @@ import {
   Setting,
 } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router'
+import imageUrl from '../assets/images/triangle_PNG6.jpg'
 
 const route = useRoute()
+const url = imageUrl
 </script>
 
 <style lang="css" scoped>

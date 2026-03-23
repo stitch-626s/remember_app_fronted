@@ -1,0 +1,11 @@
+.table-container {
+    width: 100%;
+}
+
+.name_column {
+    width: 180px;
+}
+
+.number_column {
+    width: 120px;
+}
