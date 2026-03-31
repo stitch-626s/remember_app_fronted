@@ -28,16 +28,18 @@ import request from '../utils/request';
 const questionBank = ref([]);
 
 const loadQuestionBank = () => {
-  request.get('/questionBank').then(res => {
-    if (res.code === '200') {
-      questionBank.value = res.data
-    } else {
-      alert(res.message)
-    }
-  })
+    request.get('/questionBank').then(res => {
+        if (res.code == 200) {
+            questionBank.value = res.data
+                console.log('后端返回数据：', res);
+        } else {
+            console.error('获取失败，状态码：', res.code);
+            alert(res.msg);
+        }
+    })
 }
 
 onMounted(() => {
-    loadQuestionBank()
+    loadQuestionBank();
 })
 </script>

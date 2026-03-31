@@ -9,10 +9,22 @@ const router = createRouter({
         { path: '/dashboard', component: () => import('../views/PageHome.vue'), children: [
             {
                 path: 'store', component: () => import('../views/PageQuestionBankStore.vue'),
-
             }
-        ]}
+        ]},
+        {path: '/memorize', component: () => import('../views/PageMemorize.vue')},
+        {path: '/myquestionbank', component: () => import('../views/PageMyQuestionBank.vue')},
+        {path: '/profile', component: () => import('../views/PagePersonal.vue')},
     ]
 })
+
+router.beforeEach((to, from) => {
+    const user = localStorage.getItem("user_info");
+
+    if (to.path.startsWith('/dashboard') && !user) {
+        return '/login';
+    }
+
+    return true;
+});
 
 export default router

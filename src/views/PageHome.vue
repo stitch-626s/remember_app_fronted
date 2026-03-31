@@ -6,27 +6,28 @@
     <el-container>
       <el-aside class="left-sidebar-container">
           <el-menu
+            router
             :default-active="route.path"
             class="el-menu-vertical"
           >
-            <el-menu-item index="1">
-            <el-icon><home-filled /></el-icon>
-            <template #title>首页</template>
+            <el-menu-item index="/dashboard/store">
+              <el-icon><home-filled /></el-icon>
+              <template #title>首页</template>
             </el-menu-item>
 
-            <el-menu-item index="2">
-            <el-icon><icon-menu /></el-icon>
-            <template #title>背题</template>
+            <el-menu-item index="/memorize">
+              <el-icon><icon-menu /></el-icon>
+              <template #title>背题</template>
             </el-menu-item>
 
-            <el-menu-item index="3">
-            <el-icon><document /></el-icon>
-            <template #title>题库</template>
+            <el-menu-item index="/myquestionbank">
+              <el-icon><document /></el-icon>
+              <template #title>题库</template>
             </el-menu-item>
 
-            <el-menu-item index="4">
-            <el-icon><setting /></el-icon>
-            <template #title>个人主页</template>
+            <el-menu-item index="/profile">
+              <el-icon><setting /></el-icon>
+              <template #title>个人主页</template>
             </el-menu-item>
           </el-menu>
       </el-aside>
@@ -50,14 +51,14 @@ import {
   HomeFilled,
   Menu as IconMenu,
   Setting,
-} from '@element-plus/icons-vue'
-import { useRoute } from 'vue-router'
-import imageUrl from '../assets/images/triangle_PNG6.jpg'
+} from '@element-plus/icons-vue';
+import { useRoute } from 'vue-router';
+import imageUrl from '../assets/images/临时.webp';
 
-const route = useRoute()
-const url = imageUrl
+const route = useRoute();
+const url = imageUrl;
 </script>
 
 <style lang="css" scoped>
-    @import '../assets/styles/home.css'
+    @import '../assets/styles/home.css';
 </style>
