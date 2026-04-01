@@ -102,6 +102,7 @@ import {
 } from '@element-plus/icons-vue';
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { ElMessage } from 'element-plus';
 import request from '../utils/request';
 import imageUrl from '../assets/images/临时.webp';
 
@@ -124,6 +125,7 @@ const loadQuestion = () => {
       }
     } else {
       console.error('获取题库失败:', res.message);
+      ElMessage.error(res.message || '加载题库失败，请重试');
     }
   });
 };
@@ -172,7 +174,7 @@ const submitFeedback = (type) => {
   if (currentIndex.value < currentBank.value.questions.length - 1) {
     nextQuestion();
   } else {
-    alter('背完啦！');
+    ElMessage.success('背完啦！');
   }
 };
 </script>
