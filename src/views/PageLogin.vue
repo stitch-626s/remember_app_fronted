@@ -58,7 +58,7 @@
 
       router.push('/dashboard/store'); 
     } else {
-      ElMessage.error(res.msg || "登录失败，请重试");
+      ElMessage.error(res.message || "登录失败，请重试");
     }
   } catch (error) {
     console.error("登录异常：", error);

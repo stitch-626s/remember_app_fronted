@@ -117,7 +117,30 @@ const currentIndex = ref(0);
 const showAnswer = ref(false);
 
 const loadQuestion = () => {
-  request.get('/questionBank').then(res => {
+  const userInfoStr = localStorage.getItem('user_info');
+
+  if (!userInfoStr) {
+    ElMessage.error('请先登录');
+    return;
+  }
+
+  const userData = JSON.parse(userInfoStr);
+
+  let userId = null;
+  if (userData && userData.user) {
+    userId = userData.user.user_id || userData.user.userId;
+  } else if (userData) {
+    userId = userData.user_id || userData.userId;
+  }
+
+
+  if (!userId) {
+    ElMessage.error('获取用户信息失败，请重新登录');
+    localStorage.removeItem('user_info');
+    return;
+  }
+
+  request.get(`/questionBank/user/${userId}`).then(res => {
     if (res.code == 200) {
       questionBanks.value = res.data;
       if (questionBanks.value && questionBanks.value.length > 0) {

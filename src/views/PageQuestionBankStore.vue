@@ -24,6 +24,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import request from '../utils/request';
+import { ElMessage } from 'element-plus';
 
 const questionBank = ref([]);
 
@@ -34,7 +35,7 @@ const loadQuestionBank = () => {
                 console.log('后端返回数据：', res);
         } else {
             console.error('获取失败，状态码：', res.code);
-            alert(res.msg);
+            ElMessage.error(res.message || '加载题库失败，请重试');
         }
     })
 }
