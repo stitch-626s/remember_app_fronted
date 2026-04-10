@@ -1,22 +1,16 @@
 <template>
     <div>
+        <div class="main-top">
+            题库中心
+        </div>
         <el-table class="table-container" :data="questionBank" :cell-style="{ padding: '15px 0' }" >
-        <el-table-column class="name_column" label="题库名称">
-            <template #default="scope">
-                {{ scope.row.qb_name }}
-            </template>
-        </el-table-column>
-        <el-table-column 
-            class="number_column" 
-            property="question_number" 
-            label="题目数量" 
-            />
-        <el-table-column
-            class="desc_column"
-            property="qb_description" 
-            label="题库描述" 
-            show-overflow-tooltip 
-        />
+            <el-table-column class="name_column" label="题库名称">
+                <template #default="scope">
+                    {{ scope.row.qb_name }}
+                </template>
+            </el-table-column>
+            <el-table-column class="number_column" property="question_number" label="题目数量" />
+            <el-table-column class="desc_column" property="qb_description" label="题库描述" show-overflow-tooltip />
         </el-table>
     </div>
 </template>
@@ -44,3 +38,7 @@ onMounted(() => {
     loadQuestionBank();
 })
 </script>
+
+<style lang="css" scoped>
+@import '../assets/styles/questionbankstore.css';
+</style>

@@ -6,21 +6,24 @@ const router = createRouter({
         { path: '/', redirect: '/dashboard/store'},
         { path: '/login', component: () => import('../views/PageLogin.vue') },
         { path: '/register', component: () => import('../views/PageRegister.vue')},
-        { path: '/dashboard', component: () => import('../views/PageHome.vue'), children: [
-            {
-                path: 'store', component: () => import('../views/PageQuestionBankStore.vue'),
-            }
-        ]},
-        {path: '/memorize', component: () => import('../views/PageMemorize.vue')},
-        {path: '/myquestionbank', component: () => import('../views/PageMyQuestionBank.vue')},
-        {path: '/profile', component: () => import('../views/PagePersonal.vue')},
+
+        {
+            path: '/', component: () => import('../views/PagePublicLayout.vue'),
+            children: [
+                {path: 'store', component: () => import('../views/PageQuestionBankStore.vue')},
+                {path: 'memorize', component: () => import('../views/PageMemorize.vue')},
+                {path: 'myQuestionBank', component: () => import('../views/PageMyQuestionBank.vue')},
+                {path: 'profile', component: () => import('../views/PagePersonal.vue')},
+            ]
+        }
     ]
 })
 
 router.beforeEach((to, from) => {
     const user = localStorage.getItem("user_info");
+    const protectedRoutes = ['/store', '/memorize', '/myQuestionBank', '/profile'];
 
-    if (to.path.startsWith('/dashboard') && !user) {
+    if (protectedRoutes.includes(to.path) && !user) {
         return '/login';
     }
 

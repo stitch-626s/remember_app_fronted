@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="home-layout">
     <div class="menu-top">
       <el-image class="image-home" :src=url fit="fill"/>
@@ -61,4 +61,4 @@ const url = imageUrl;
 
 <style lang="css" scoped>
     @import '../assets/styles/home.css';
-</style>
+</style> -->
