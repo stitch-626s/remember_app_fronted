@@ -7,6 +7,8 @@
       <el-input v-model="registerForm.username" class="input-email" placeholder="输入邮箱账号" />
       <p id="password">密码</p>
       <el-input v-model="registerForm.password" class="input-password" placeholder="输入密码" />
+      <p id="confirm-password">确认密码</p>
+      <el-input v-model="registerForm.confirmPassword" class="input-confirm-password" placeholder="再次输入密码" show-password />
     </div>
 
     <div>
@@ -35,13 +37,18 @@
   const handleRegister = async () => {
     const usernameVerify = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!usernameVerify.test(registerForm.value.username)) {
-      alert("邮箱格式不正确");
+      ElMessage.warning("邮箱格式不正确");
       return;
     }
     
     const passwordVerify = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/;
     if (!passwordVerify.test(registerForm.value.password)) {
-      alert("密码格式不正确：必须包含数字和字母，且长度在8-16位之间");
+      ElMessage.warning("密码格式不正确：必须包含数字和字母，且长度在8-16位之间");
+      return;
+    }
+
+    if (registerForm.value.password !== registerForm.value.confirmPassword) {
+      ElMessage.warning("两次输入的密码不一致");
       return;
     }
 

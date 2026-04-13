@@ -28,7 +28,7 @@ request.interceptors.response.use(response => {
 
     if (res.code === '401' || res.code === 401) {
         ElMessage.error('登录状态已过期，请重新登录');
-        localStorage.removeItem('userInfo');
+        localStorage.removeItem('user_info');
         router.push('/login');
     }
 
