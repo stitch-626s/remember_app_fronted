@@ -56,7 +56,7 @@
       
       localStorage.setItem("user_info", JSON.stringify(res.data));
 
-      router.push('/dashboard/store'); 
+      router.push('/store'); 
     } else {
       ElMessage.error(res.message || "登录失败，请重试");
     }

@@ -8,7 +8,7 @@ const request = axios.create({
 });
 
 request.interceptors.request.use(config => {
-    const userInfoStr = localStorage.getItem('userInfo');
+    const userInfoStr = localStorage.getItem('user_info');
     if (userInfoStr) {
         const userInfo = JSON.parse(userInfoStr);
         if (userInfo.token) {

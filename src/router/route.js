@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: '/', redirect: '/dashboard/store'},
+        { path: '/', redirect: '/login'},
         { path: '/login', component: () => import('../views/PageLogin.vue') },
         { path: '/register', component: () => import('../views/PageRegister.vue')},
 
