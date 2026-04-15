@@ -4,15 +4,15 @@
 
     <div class="input-area">
       <p id="email">电子邮件</p>
-      <el-input v-model="loginForm.username" class="input-email" placeholder="输入邮箱账号" />
+      <el-input v-model="loginForm.userAccount" class="input-email" placeholder="输入邮箱账号" />
       <p id="password">密码</p>
-      <el-input v-model="loginForm.password" class="input-password" show-password @keyup.enter="handleLogin" placeholder="输入密码" />
+      <el-input v-model="loginForm.password" class="input-password" @keyup.enter="handleLogin" placeholder="输入密码" />
       <router-link class="re-password" to="/re-password">忘记密码？</router-link>
     </div>
 
     <div>
       <div class="primary-btn">
-        <el-checkbox class="check-btn" v-model="checked1" label="记住账号" size="large" />
+        <el-checkbox class="check-btn" v-model="rememberAccount" label="记住账号" size="large" />
         <el-button type="primary" class="login-btn" @click="handleLogin">登录</el-button>
         <span id="register-tip">还没有账号？ <router-link class="to-register" to="/register">立即注册</router-link></span>
       </div>
@@ -22,23 +22,31 @@
 </template>
 
 <script setup >
-  import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
-  import { ElMessage } from 'element-plus';
-  import CryptoJS from 'crypto-js';
-  import request from '../utils/request';
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
+import CryptoJS from 'crypto-js';
+import request from '../utils/request';
 
-  const router = useRouter();
-  
-  const loginForm = ref({
-    username: "",
-    password: ""
-  });
+const router = useRouter();
 
-  const checked1 = ref(false);
+const loginForm = ref({
+  userAccount: "",
+  password: ""
+});
 
-  const handleLogin = async () => {
-  if (!loginForm.value.username || !loginForm.value.password) {
+const rememberAccount = ref(false);
+
+onMounted(() => {
+  const saveAccount = localStorage.getItem("saveAccount");
+  if (saveAccount) {
+    loginForm.value.userAccount = saveAccount;
+    rememberAccount.value = true;
+  }
+})
+
+const handleLogin = async () => {
+  if (!loginForm.value.userAccount || !loginForm.value.password) {
     ElMessage.warning("请填写账号和密码");
     return;
   }
@@ -47,7 +55,7 @@
 
   try {
     const res = await request.post('/users/login', {
-      username: loginForm.value.username,
+      userAccount: loginForm.value.userAccount,
       password: encryptedPassword
     });
 

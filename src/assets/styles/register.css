@@ -36,6 +36,12 @@
     margin-bottom: 15px;
 }
 
+.input-confirm-password {
+    width: 340px;
+    height: 40px;
+    margin-bottom: 15px;
+}
+
 .primary-btn {
     display: flex;
     flex-direction: column;

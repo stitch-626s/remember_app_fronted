@@ -4,10 +4,9 @@
 
     <div class="input-area">
       <p id="email">电子邮件</p>
-      <el-input v-model="registerForm.username" class="input-email" placeholder="输入邮箱账号" />
+      <el-input v-model="registerForm.userAccount" class="input-email" placeholder="输入邮箱账号" />
       <p id="password">密码</p>
       <el-input v-model="registerForm.password" class="input-password" placeholder="输入密码" />
-      <p id="confirm-password">确认密码</p>
       <el-input v-model="registerForm.confirmPassword" class="input-confirm-password" placeholder="再次输入密码" show-password />
     </div>
 
@@ -30,13 +29,13 @@
   const router = useRouter();
 
   const registerForm = ref({
-    username: "",
+    userAccount: "",
     password: ""
   });
 
   const handleRegister = async () => {
-    const usernameVerify = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!usernameVerify.test(registerForm.value.username)) {
+    const userAccountVerify = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!userAccountVerify.test(registerForm.value.userAccount)) {
       ElMessage.warning("邮箱格式不正确");
       return;
     }
@@ -54,7 +53,7 @@
 
     const encryptedPassword = CryptoJS.SHA256(registerForm.value.password).toString();
     const res =  await request.post('/users/register', {
-      username: registerForm.value.username,
+      userAccount: registerForm.value.userAccount,
       password: encryptedPassword
     });
 
