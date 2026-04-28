@@ -283,7 +283,6 @@ import {
   Plus
 } from '@element-plus/icons-vue';
 import request from '../utils/request';
-import { lo } from 'element-plus/es/locale/index.mjs';
 
 const router = useRouter();
 const reminderEnabled = ref(false);
@@ -399,7 +398,7 @@ const handleAvatarChange = async (event) => {
   if (!file) return
 
   const isImage = file.type.startsWith('image/')
-  const isLt2G = file.size / 1024  < 2
+  const isLt2G = file.size / 1024 < 2
 
   if (!isImage) {
     ElMessage.error('请选择图片文件')

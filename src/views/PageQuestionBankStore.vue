@@ -20,7 +20,7 @@
     </div>
 
     <div class="banks-grid">
-      <div v-for="bank in filteredBanks" :key="bank.qbId" class="bank-card" @click="viewBank(bank)">
+      <div v-for="bank in filteredBanks" :key="bank.qbId" class="bank-card" @click.stop="viewBank(bank)">
         <div class="bank-icon" :style="{ background: getGradient(bank.qbId) }">
           <el-icon :size="28">
             <FolderOpened />
@@ -38,9 +38,15 @@
             </span>
           </div>
         </div>
-        <div class="bank-action">
-          <el-button type="primary" size="small" round>
+        <div class="bank-action" @click.stop>
+          <el-button type="primary" size="small" round @click="viewBank(bank)">
             查看
+          </el-button>
+          <el-button type="success" size="small" round @click="downloadBank(bank)" :loading="downloadingBanks.has(bank.qbId)">
+            <el-icon v-if="!downloadingBanks.has(bank.qbId)">
+              <Download />
+            </el-icon>
+            下载
           </el-button>
         </div>
       </div>
@@ -78,8 +84,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { Search, FolderOpened, Document } from '@element-plus/icons-vue';
+import { Search, FolderOpened, Document, Download } from '@element-plus/icons-vue';
 import request from '../utils/request';
+import { ElMessage } from 'element-plus';
 
 const questionBanks = ref([]);
 const searchKeyword = ref('');
@@ -89,6 +96,8 @@ const questionListDialogVisible = ref(false);
 const questionTableData = ref([]);
 const currentBankId = ref(null);
 const currentBankName = ref('');
+
+const downloadingBanks = ref(new Set());
 
 const categories = [
   { label: '全部', value: 'all' },
@@ -108,6 +117,13 @@ const gradients = [
 ];
 
 const getGradient = (id) => gradients[id % gradients.length];
+
+const getUserId = () => {
+  const userInfoStr = localStorage.getItem('user_info');
+  if (!userInfoStr) return null
+  const userData = JSON.parse(userInfoStr);
+  return userData?.user?.userId || userData?.userId
+}
 
 const filteredBanks = computed(() => {
   let banks = questionBanks.value;
@@ -146,6 +162,77 @@ const viewBank = async (bank) => {
     }
   } catch (error) {
     ElMessage.error('加载题库详情失败');
+  }
+}
+
+const checkDuplicateName = async (userId, name) => {
+  try {
+    const res = await request.get(`/questionBank/user/${userId}`);
+    if (res.code === 200 || res.code === "200") {
+      const existingBanks = res.data || [];
+      const duplicates = existingBanks.filter(b => b.qbName === name);
+      if (duplicates.length > 0) {
+        return duplicates.length + 1;
+      }
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+const downloadBank = async (bank) => {
+  const userId = getUserId();
+  if (!userId) {
+    ElMessage.warning('请先登录后再下载题库');
+    return;
+  }
+
+  downloadingBanks.value.add(bank.qbId);
+  downloadingBanks.value = new Set(downloadingBanks.value);
+
+  try {
+    const bankRes = await request.get(`/questionBank/${bank.qbId}`);
+    if (bankRes.code !== 200 && bankRes.code !== "200") {
+      throw new Error('获取题库详情失败');
+    }
+
+    const questions = bankRes.data?.questions || [];
+    let finalName = bank.qbName;
+
+    const suffix = await checkDuplicateName(userId, bank.qbName);
+    if (suffix) {
+      finalName = `${bank.qbName} (${suffix})`;
+    }
+
+    const createRes = await request.post('/questionBank', {
+      userId: userId,
+      qbName: finalName,
+      qbDescription: bank.qbDescription
+    });
+
+    if (createRes.code !== 200 && createRes.code !== "200") {
+      throw new Error('创建题库失败');
+    }
+
+    const newBankId = createRes.data?.qbId || createRes.data;
+
+    for (const question of questions) {
+      await request.post('/question', {
+        qbId: newBankId,
+        userId: userId,
+        questionName: question.questionName,
+        questionAnswer: question.questionAnswer
+      });
+    }
+
+    ElMessage.success(`"${finalName}" 下载成功！`);
+  } catch (error) {
+    console.error('下载失败:', error);
+    ElMessage.error('下载失败，请重试');
+  } finally {
+    downloadingBanks.value.delete(bank.qbId);
+    downloadingBanks.value = new Set(downloadingBanks.value);
   }
 }
 
