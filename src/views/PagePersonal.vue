@@ -398,14 +398,14 @@ const handleAvatarChange = async (event) => {
   if (!file) return
 
   const isImage = file.type.startsWith('image/')
-  const isLt2G = file.size / 1024 < 2
+  const isLt2G = file.size / 1024 / 1024 < 5
 
   if (!isImage) {
     ElMessage.error('请选择图片文件')
     return
   }
   if (!isLt2G) {
-    ElMessage.error('图片大小不能超过 2GB')
+    ElMessage.error('图片大小不能超过 5MB')
     return
   }
 
